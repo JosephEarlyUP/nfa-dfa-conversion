@@ -17,5 +17,5 @@ export interface DFA{
     alphabet: string[];
     transitions: Record<string, Record<string, string>>;    //Deterministic, so no need for a string array
     startState: string;
-    endStates: string[];
+    acceptStates: string[];
 }//DFA

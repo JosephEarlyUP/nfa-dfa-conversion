@@ -75,7 +75,7 @@ function verifyTransitions(transitions: Record<string, unknown>, states: string[
 
         for(let j = 0; j < actions.length; ++j) {
             //Verify action is in alphabet
-            if(!inAlphabet(actions[j], alphabet)) {
+            if(actions[j] !== "" && (!inAlphabet(actions[j], alphabet))) {
                 throw new Error("all transition actions must be in alphabet");
             }
 
