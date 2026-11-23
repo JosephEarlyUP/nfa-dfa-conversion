@@ -6,9 +6,6 @@
 import { stringify } from "querystring";
 import { DFA, NFA } from "./types";
 
-
-
-
 /**
  * Takes an NFA and returns an equivalent DFA
  * @param NFA 
@@ -40,7 +37,7 @@ export function nfaToDFA(NFA: NFA): DFA {
             if(alphabet[i] === "") { continue; }    //skip over epsilon here
             const visitedFoundStates = new Set<string>();
             
-            //CHECK CURRENT ACTION FOR ALL STATES IN ARRAY
+            //CHECK ALL STATES FOR CURRENT ACTION
             for(let j = 0; j < currStateArr.length; ++j) {
                 const foundStates = transitions[currStateArr[j]]?.[alphabet[i]] || [];  //curr[state] currAction -> what states? 
                 for(let k = 0; k < foundStates.length; ++k) {
@@ -96,9 +93,6 @@ export function nfaToDFA(NFA: NFA): DFA {
 
     return equivDFA;
 }//nfaToDFA
-
-
-
 
 /**
  * Returns the epsilon closure of a set of states

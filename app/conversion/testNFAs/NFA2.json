@@ -14,5 +14,5 @@
     }
   },
   "startState": "q0",
-  "acceptStates": ["q1"]
+  "acceptStates": ["q3"]
 }

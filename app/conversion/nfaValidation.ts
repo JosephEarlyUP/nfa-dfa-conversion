@@ -1,5 +1,5 @@
 /**
- * Sanity checks for NFA JSON input
+ * Sanity checks for NFA JSON
  * @author Joseph Early
  */
 
@@ -11,7 +11,7 @@ import { NFA } from "./types";
  * @param inputNFA 
  * @returns NFA
  */ 
-export function validateNFA(inputNFA: unknown): NFA {  //ts syntax is name: dataType
+export function validateNFA(inputNFA: unknown): NFA {
 
     //Verify JSON input
     if(!inputNFA || typeof inputNFA !== 'object') { //!inputNFA is a null check
@@ -47,9 +47,6 @@ export function validateNFA(inputNFA: unknown): NFA {  //ts syntax is name: data
     return inputNFA as unknown as NFA; //temp
 }//validateNFA
 
-
-
-
 /**
  * Verifies all referenced states are in Q and all actions are in the alphabet
  */
@@ -60,7 +57,7 @@ function verifyTransitions(transitions: Record<string, unknown>, states: string[
 
         //Verify all fromStates are in Q
         if(!inStates(transitionStates[i], states)) {
-            throw new Error("All states references in transition must be in Q");
+            throw new Error("All states referenced in transitions must be in Q");
         }
 
         //Check actions and toStates 
@@ -95,9 +92,6 @@ function verifyTransitions(transitions: Record<string, unknown>, states: string[
 
 }//verifyTransitions
 
-
-
-
 /**
  * Verifies the formatting of the passed through NFA matches the NFA interface from types
  * @param possibleNFA
@@ -117,9 +111,6 @@ function verifyFormat(possibleNFA: Record<string, unknown>): void {
         throw new Error("transitions must be valid JSON");
     }
 }//verifyFormat
-
-
-
 
 //Verify state is in Q
 function inStates(state: string, states: string[]): boolean {
