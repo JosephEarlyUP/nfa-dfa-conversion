@@ -13,14 +13,24 @@ import { toast } from 'sonner';
 import { NFA, DFA } from '../conversion/types';
 import { validateNFA } from '../conversion/nfaValidation';
 import { nfaToDFA } from '../conversion/nfaToDfa';
+import { off } from 'process';
 
-export default function NFAForm() {
+interface NFAFormProps {
+    onConversionComplete: (dfa: DFA) => void;
+}
+
+export default function NFAForm({ onConversionComplete }: NFAFormProps) {
 
     //states for each component of NFA Tuple   
     const [NFAStates, setNFAStates] = useState(''); //useState returns array w/ currValue and a setter
     const [NFAAlphabet, setNFAAlphabet] = useState('');
     const [NFAStartState, setNFAStartState] = useState('');
     const [NFAAcceptStates, setNFAAcceptStates] = useState('');
+
+    //Keep track of converted DFA for JSON download
+    const [convertedDFA, setConvertedDFA] = useState<DFA | null>(null);
+    const [inputMode, setInputMode] = useState<'form' | 'json'>('form');
+    const [jsonText, setJsonText] = useState('');
 
 
     //TRANSITION LOGIC
@@ -74,16 +84,68 @@ export default function NFAForm() {
             const equivDFA: DFA = nfaToDFA(verifiedNFA);
             console.log('NFA to DFA Conversion Complete')
 
+            //load DFA for download
+            setConvertedDFA(equivDFA);
+            console.log('loaded DFA for json download')
+
             toast.success(`NFA to DFA Conversion Complete!`)
+            onConversionComplete(equivDFA);
 
         } catch (error: any) {
             toast.error(`NFA Verification Error: ${error.message}`);
         }
     };
 
+    /**
+     * Verify user input JSON and render DFA
+     */
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if(!file) return; //sanity check for actual input
 
+        const fr = new FileReader();
+        fr.onload = (event) => {
+            try {
+                const inputJSON = JSON.parse(event.target?.result as string);
+                const verifiedNFA: NFA = validateNFA(inputJSON);
+                const equivDFA: DFA = nfaToDFA(verifiedNFA);
+                setConvertedDFA(equivDFA);
+                toast.success("NFA JSON uploaded successfully!");
+                onConversionComplete(equivDFA);
+
+            } catch (error: any) {
+                toast.error(`JSON Upload Error: ${error.message}`)
+            }
+        }
+
+        fr.readAsText(file);
+        e.target.value = ''; //reset for next upload
+    }//handleFileUpload
+
+    const handleDownloadDFAJson = () => {
+        if (!convertedDFA) return; //sanity check
+
+        //convert to Blob
+        const jsonString = JSON.stringify(convertedDFA, null, 2);
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        //download
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.href = url;
+        downloadAnchor.download = "equiv-dfa.json";
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+
+        downloadAnchor.remove();
+        URL.revokeObjectURL(url);
+
+        toast.success("DFA Downloaded!");
+    }//handleDownloadDFAJson
+
+//
     return (
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6 max-w-md mx-auto flex flex-col gap-6">
+        <div className="bg-white p-6 max-w-md mx-auto flex flex-col gap-6">
 
             {/* FORM TITLE STUFF */}
             <div>
@@ -91,9 +153,28 @@ export default function NFAForm() {
                 <p className="text-sm text-slate-500">Configure your NFA's formal tuple description. </p>
                 <p className="text-sm text-slate-500">(Q, Σ, δ, q₀, F)</p>
             </div>
+            
+            {/* JSON UPLOAD */}
+            <label className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-center text-slate-600 cursor-pointer hover:border-black focus:outline-none">
+                Upload NFA JSON
+                <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleFileUpload}
+                    className="hidden"/>
+            </label>
+
+            {convertedDFA && (
+                <button
+                    type="button"
+                    onClick={handleDownloadDFAJson}
+                    className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-center text-slate-600 cursor-pointer hover:border-black focus:outline-none"
+                    >
+                    Download DFA
+                </button>
+            )}
 
             {/* NFA INPUTS */}
-
             {/* input box wrapper*/}
             <div className="flex flex-col gap-4">
 

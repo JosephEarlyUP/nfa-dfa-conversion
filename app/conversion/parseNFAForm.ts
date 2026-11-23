@@ -75,6 +75,6 @@ export function parseNFAForm(
         return unverifiedNFA;
 
     } catch (error: any) {
-            throw new Error(`NFA Validation Error: ${error.message}`)
+            throw new Error(error.message)
     }
 }//parseNFAForm
