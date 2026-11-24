@@ -27,7 +27,6 @@ body {
 
 .react-flow__handle {
   opacity: 0 !important;
-  pointer-events: none !important;
   border: none !important;
   background: transparent !important;
 }

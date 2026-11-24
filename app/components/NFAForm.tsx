@@ -1,6 +1,8 @@
 /**
  * Form allowing user to input the five tuple description of an NFA for conversion.
  * @author Joseph Early
+ * 
+ * 
  */
 
 'use client'
@@ -29,9 +31,6 @@ export default function NFAForm({ onConversionComplete }: NFAFormProps) {
 
     //Keep track of converted DFA for JSON download
     const [convertedDFA, setConvertedDFA] = useState<DFA | null>(null);
-    const [inputMode, setInputMode] = useState<'form' | 'json'>('form');
-    const [jsonText, setJsonText] = useState('');
-
 
     //TRANSITION LOGIC
     const [NFATransitions, setNFATransitions] = useState([
@@ -293,5 +292,4 @@ export default function NFAForm({ onConversionComplete }: NFAFormProps) {
             </button>
         </div>
     );
-
 }//NFAForm

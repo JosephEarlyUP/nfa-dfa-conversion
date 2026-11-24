@@ -23,7 +23,7 @@ export function validateNFA(inputNFA: unknown): NFA {
     verifyFormat(possibleNFA);
 
 
-    //1. VERIFY STATES FROM Q
+    //VERIFY STATES FROM Q
     const states = possibleNFA.states as string[];
     const startState = possibleNFA.startState as string;
     const acceptStates = possibleNFA.acceptStates as string[];
