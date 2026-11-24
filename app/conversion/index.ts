@@ -1,5 +1,5 @@
 /**
- * Entry point for NFA->DFA conversion
+ * Entry point for NFA->DFA conversion testing
  */
 
 import fs from 'fs/promises';

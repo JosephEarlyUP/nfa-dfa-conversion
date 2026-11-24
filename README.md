@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## NFA to DFA full-stack app
+A NextJS web application for NFA to DFA conversion with DFA visualization using React Flow.
 
-## Getting Started
+### To Access on Vercel
+* [Visit on Vercel](https://nfa-dfa-conversion-4izt.vercel.app)
 
-First, run the development server:
+### Dependencies
+* Please ensure you have NodesJS installed and some package manager (npm, pnpm, etc).
 
+### To Run Locally
+1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/JosephEarlyUP/nfa-dfa-conversion.git
+cd nfa-dfa-conversion
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
+```bash
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run in production mode
+```bash
+pnpm build
+pnpm start
+```
+- Alternatively to run for development
+```bash
+pnpm dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### JSON Format for NFA input files
+* When uploading an NFA JSON for conversion, please ensure it follows the provided syntax. Otherwise, customize an NFA for conversion using the form.
+```
+{
+  "states": ["q0", "q1", "q2"],
+  "alphabet": ["a", "b"],
+  "transitions": {
+    "q0": {
+      "a": ["q1"],
+      "b": ["q0"]
+    },
+    "q1": {
+      "a": ["q2"],
+      "b": ["q0"]
+    },
+    "q2": {
+      "a": ["q2"],
+      "b": ["q2"]
+    }
+  },
+  "startState": "q0",
+  "acceptStates": ["q2"]
+}
+```
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
